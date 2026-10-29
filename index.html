@@ -4,29 +4,197 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Halo, Ay!</title>
-  
-  <!-- Google Fonts: Quicksand -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: 'Quicksand', sans-serif;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 30px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 450px;
+      width: 100%;
+    }
+
+    h1 {
+      font-family: 'Sacramento', cursive;
+      font-size: 3.5rem;
+      color: #d63384;
+      margin-bottom: 15px;
+      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+    }
+
+    /* Carousel Style */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+      background: #000;
+      aspect-ratio: 9/16; /* Format portrait HP */
+      max-height: 400px;
+    }
+
+    .carousel-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    .carousel-slide.active {
+      display: block;
+    }
+
+    .carousel-slide video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Navigation Buttons */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.6);
+      border: none;
+      color: #d63384;
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 10px 14px;
+      border-radius: 50%;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+      transition: background 0.2s, transform 0.2s;
+      z-index: 10;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.9);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .prev-btn { left: 10px; }
+    .next-btn { right: 10px; }
+
+    /* Dots Indicator */
+    .dots-container {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(214, 51, 132, 0.3);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .dot.active {
+      background: #d63384;
+      width: 20px;
+      border-radius: 10px;
     }
   </style>
 </head>
-<body class="bg-gradient-to-br from-pink-200 via-pink-300 to-pink-200 min-h-screen flex items-center justify-center p-4">
+<body>
 
-  <!-- Card Tengah -->
-  <div class="bg-white/40 backdrop-blur-md border border-white/60 p-8 md:p-12 rounded-3xl shadow-xl text-center transform hover:scale-105 transition duration-300">
-    <h1 class="text-4xl md:text-6xl font-bold text-pink-600 drop-shadow-sm">
-      Halo, Ay! 
-    </h1>
+  <div class="container">
+    <h1>Halo, Ay!</h1>
+    
+    <!-- Video Carousel -->
+    <div class="carousel-container">
+      <button class="nav-btn prev-btn" onclick="changeSlide(-1)">❮</button>
+      <button class="nav-btn next-btn" onclick="changeSlide(1)">❯</button>
+
+      <!-- Video Slide 1 -->
+      <div class="carousel-slide active">
+        <video controls playsinline preload="metadata">
+          <source src="video1.mp4" type="video/mp4">
+          Browser kamu tidak mendukung pemutar video.
+        </video>
+      </div>
+
+      <!-- Video Slide 2 -->
+      <div class="carousel-slide">
+        <video controls playsinline preload="metadata">
+          <source src="video4.mp4" type="video/mp4">
+          Browser kamu tidak mendukung pemutar video.
+        </video>
+      </div>
+
+      <!-- Video Slide 3 -->
+      <div class="carousel-slide">
+        <video controls playsinline preload="metadata">
+          <source src="video3.mp4" type="video/mp4">
+          Browser kamu tidak mendukung pemutar video.
+        </video>
+      </div>
+    </div>
+
+    <!-- Dots Indicator -->
+    <div class="dots-container">
+      <span class="dot active" onclick="goToSlide(0)"></span>
+      <span class="dot" onclick="goToSlide(1)"></span>
+      <span class="dot" onclick="goToSlide(2)"></span>
+    </div>
   </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+
+    function showSlide(index) {
+      // Pause semua video saat berpindah slide
+      slides.forEach(slide => {
+        const video = slide.querySelector('video');
+        if (video) video.pause();
+        slide.classList.remove('active');
+      });
+
+      dots.forEach(dot => dot.classList.remove('active'));
+
+      currentSlide = (index + slides.length) % slides.length;
+
+      slides[currentSlide].classList.add('active');
+      dots[currentSlide].classList.add('active');
+    }
+
+    function changeSlide(direction) {
+      showSlide(currentSlide + direction);
+    }
+
+    function goToSlide(index) {
+      showSlide(index);
+    }
+  </script>
 
 </body>
 </html>
